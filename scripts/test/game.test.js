@@ -4,7 +4,7 @@
 
 
 //import the game to be tested (each function needs to be imported)
-const { game, newGame, showScore, addTurn } = require("../game");
+const { game, newGame, showScore, addTurn, lightsOn } = require("../game");
 
 
 //the code below will be the same for every html 
@@ -71,4 +71,30 @@ describe("new game works correctly", () => {
         expect(document.getElementById("score").innerText).toEqual(0);
     });
 
+});
+
+describe("gameplay works correctly", () => {
+    //before each runs before each test is run
+    //before all runs before all the test
+    beforeEach(() => {
+        game.score = 0;
+        game.currentGame = [];
+        game.playerMoves = [];
+        addTurn();
+    });
+    //reset the state after each test
+    afterEach(() => {
+        game.score =0;
+        game.currentGame = [];
+        game.playerMoves = [];
+    });
+    test("addTurns add a new turn to the game", () => {
+        addTurn();
+        expect(game.currentGame.length).toBe(2);
+    });
+    test("should add correct class to light up the buttons", () => {
+        let button = document.getElementById(game.currentGame[0]);
+        lightsOn(game.currentGame[0]);
+        expect(button.classList).toContain("light");
+    });
 });
