@@ -2,6 +2,7 @@ let game = {
     score: 0,
     currentGame: [],
     playerMoves: [],
+    turnNumber: 0,
     choices: ["button1", "button2", "button3", "button4"]
 }
 
@@ -19,7 +20,7 @@ function addTurn() {
     //call showturns() function
     game.playerMoves = [];
     game.currentGame.push(game.choices[(Math.floor(Math.random() * 4))]);
-    //showTurns();
+    showTurns();
 }
 
 function showScore() {
@@ -34,6 +35,20 @@ function lightsOn(circ) {
 
 }
 
+function showTurns() {
+    //set the turnNumbers to zero and use it as index number for the array
+    game.turnNumber = 0;
+    let turns = setInterval(() => {
+        //calling the fucntion inside a set interval
+        lightsOn(game.currentGame[game.turnNumber]);
+        game.turnNumber++;
+        //if the turnnumber is equal or higher than lenght of current game
+        if (game.turnNumber >= game.currentGame.length) {
+            clearInterval(turns);
+        }
+    }, 800)
+}
+
 //export the game to be tested 
-module.exports = { game, newGame, showScore, addTurn, lightsOn };
+module.exports = { game, newGame, showScore, addTurn, lightsOn, showTurns };
 
