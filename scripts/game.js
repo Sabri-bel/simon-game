@@ -62,6 +62,20 @@ function showTurns() {
     }, 800)
 }
 
+function playerTurn() {
+    //compare value with the same index number
+    //get the last element of playermoves array
+    let i = game.playerMoves.length - 1;
+    if (game.currentGame[i] === game.playerMoves[i]) {
+        game.score++;
+        showScore();
+        addTurn();
+    } else {
+        alert("wrong move!");
+        newGame();
+    }
+}
+
 //export the game to be tested 
-module.exports = { game, newGame, showScore, addTurn, lightsOn, showTurns };
+module.exports = { game, newGame, showScore, addTurn, lightsOn, showTurns, playerTurn };
 

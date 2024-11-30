@@ -2,9 +2,13 @@
  * @jest-environment jsdom
  */
 
-
 //import the game to be tested (each function needs to be imported)
-const { game, newGame, showScore, addTurn, lightsOn, showTurns } = require("../game");
+const { default: JSDOMEnvironment } = require("jest-environment-jsdom");
+const { game, newGame, showScore, addTurn, lightsOn, showTurns, playerTurn } = require("../game");
+
+//jestspy will report activity based on paramemters: window with the alert method
+//it will catch the alert and divert it into a function empty
+jest.spyOn(window, "alert").mockImplementation(() => { });
 
 
 //the code below will be the same for every html 
@@ -110,6 +114,17 @@ describe("gameplay works correctly", () => {
         game.turnNumber = 42;
         showTurns();
         expect(game.turnNumber).toBe(0);
+    });
+    test("should increment the score if the turn is correct", () => {
+        //add the turn into the player move array before
+        game.playerMoves.push(game.currentGame[0]);
+        playerTurn();
+        expect(game.score).toBe(1);
+    });
+    test("should call an alert if the move is wrong", () => {
+        game.playerMoves.push("wrong");
+        playerTurn;
+        expect(window.alert).toBeCalledWith("Wrong Move!");
     });
 
 //showturns() should:
