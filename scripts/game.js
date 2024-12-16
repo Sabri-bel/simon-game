@@ -3,6 +3,8 @@ let game = {
     currentGame: [],
     playerMoves: [],
     turnNumber: 0,
+    lastButton: "",
+    turnInProgress: false,
     choices: ["button1", "button2", "button3", "button4"]
 }
 
@@ -13,12 +15,17 @@ function newGame() {
     for (let circle of document.getElementsByClassName("circle")) {
         if (circle.getAttribute("data-listener") !== "true") {
             circle.addEventListener("click", (e) => {
-                //get click targets ID and store that in move variable
-                let move = e.target.getAttribute("id");
-                lightsOn(move);
-                //push that in game.playermoves
-                game.playerMoves.push(move);
-                playerTurn();
+                // accept the click only if the currentgame > 0 - game already in progress
+                if (game.currentGame.length > 0 && !game.turnInProgress) {
+                    //get click targets ID and store that in move variable
+                    let move = e.target.getAttribute("id");
+                    //store the move in game.lastbutton
+                    game.lastButton = move;
+                    lightsOn(move);
+                    //push that in game.playermoves
+                    game.playerMoves.push(move);
+                    playerTurn();
+                }
             });
             circle.setAttribute("data-listener", "true");
         }
@@ -49,6 +56,7 @@ function lightsOn(circ) {
 }
 
 function showTurns() {
+    game.turnInProgress = true;
     //set the turnNumbers to zero and use it as index number for the array
     game.turnNumber = 0;
     let turns = setInterval(() => {
@@ -58,6 +66,7 @@ function showTurns() {
         //if the turnnumber is equal or higher than lenght of current game
         if (game.turnNumber >= game.currentGame.length) {
             clearInterval(turns);
+            game.turnInProgress = false;
         }
     }, 800)
 }
